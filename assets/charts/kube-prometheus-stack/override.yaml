@@ -1,0 +1,88 @@
+prometheusOperator:
+  enabled: true
+  admissionWebhooks:
+    enabled: false
+kubeDns:
+  enabled: false
+grafana:
+  grafana.ini:
+    server:
+      root_url: https://grafana.k3d.localhost/
+  sidecar:
+    dashboards:
+      enabled: true
+      searchNamespace: ALL
+  dashboards:
+    # extra:
+    #   velero-stats:
+    #     gnetId: 11055
+    #     datasource: Prometheus
+    default:
+      mariadb:
+        gnetId: 13106
+        datasource: default
+      blackbox-exporter:
+        gnetId: 14928
+        datasource: default
+        revision: 3
+      redis-exporter:
+        gnetId: 11835
+        datasource: default
+        revision: 1
+      nginx:
+        url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
+        datasource: default
+      nginx-request-handling-performance:
+        url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/request-handling-performance.json
+        datasource: default
+      argocd:
+        url: https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json
+        datasource: default
+      argocd-notifications:
+        url: https://argocd-notifications.readthedocs.io/en/stable/grafana-dashboard.json
+        datasource: default
+      argocd-image-updater:
+        url: https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/master/config/example-grafana-dashboard.json
+        datasource: default
+      external-secrets:
+        url: https://gist.githubusercontent.com/MPV/fed281a9cd3297fa8b61387b9004af16/raw/4d88828d6f4d12a405f6ebf5bccedb179f2d9f93/grafana-dashboard-kubernetes-external-secrets.json  
+        datasource: default
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+  # additionalDataSources:
+  #   - name: Loki
+  #     type: loki
+  #     url: http://loki-stack.loki.svc.cluster.local:3100
+  #     isDefault: false
+  #     jsonData:
+  #       maxLines: 5000
+  ingress:
+    enabled: true
+    annotations: {}
+    hosts:
+      - grafana.k3d.localhost
+    path: /
+prometheus:
+  ingress:
+    enabled: true
+    annotations: {}
+    hosts:
+      - prometheus.k3d.localhost
+    path: /
+alertmanager:
+  ingress:
+    enabled: true
+    annotations: {}
+    hosts:
+      - alertmanager.k3d.localhost
+    path: /

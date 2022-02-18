@@ -1,0 +1,19 @@
+apiVersion: k3d.io/v1alpha2
+kind: Simple
+name: prometheus
+servers: 1
+agents: 1
+ports:
+  - port: 443:80
+    nodeFilters:
+      - loadbalancer
+  - port: 80:80
+    nodeFilters:
+      - loadbalancer
+registries:
+  create: true
+  config: |
+    mirrors:
+      my.company.registry:
+        endpoint:
+          - http://registry.company.com:5000
