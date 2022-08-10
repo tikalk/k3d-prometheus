@@ -10,7 +10,7 @@ LOKI_CHART_VERSION=2.6.0
 start-monitor:
 	k3d cluster create --config ./assets/k3d-config-registry.yaml --wait || k3d cluster list | grep $(CLUSTER_NAME) && k3d cluster start $(CLUSTER_NAME)
 	k3d kubeconfig merge $(CLUSTER_NAME) --kubeconfig-merge-default --kubeconfig-switch-context
-	kubectx k3d-$(CLUSTER_NAME)
+	# kubectx k3d-$(CLUSTER_NAME)
 
 _create_ns:
 	@kubectl get ns | grep $(NS) || kubectl create ns $(NS)
@@ -46,8 +46,7 @@ helm-redis: _create_redis_ns
 start-redis: helm-redis
 
 helm-grafana: _create_ns
-	@helm repo list | grep $(NS) || \
-	 helm repo add grafana https://grafana.github.io/helm-charts
+	@helm repo add grafana https://grafana.github.io/helm-charts
 	@helm search repo grafana --version=$(GRAFANA_CHART_VERSION) || helm repo update
 	helm upgrade grafana --install grafana/grafana \
 		--namespace $(NS) \
