@@ -1,0 +1,14 @@
+pushgateway:
+  enabled: false
+alertmanager:
+  enabled: false
+server:
+  ingress:
+    enabled: true
+    path: /
+
+    # pathType is only for k8s >= 1.1=
+    pathType: Prefix
+
+    hosts:
+      - prom.k3d.localhost

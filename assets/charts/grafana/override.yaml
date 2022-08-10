@@ -1,0 +1,79 @@
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder:
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+dashboards:
+  default:
+    cluster-metrics:
+      datasource: Prometheus
+      gnetId: 6417
+      revision: 1
+    persistent-volumes:
+      datasource: Prometheus
+      gnetId: 6739
+      revision: 1
+    node-exporter-full:
+      datasource: Prometheus
+      gnetId: 1860
+      revision: 23
+    prometheus-overview:
+      datasource: Prometheus
+      gnetId: 3662
+      revision: 1
+    prometheus-stats:
+      datasource: Prometheus
+      gnetId: 2
+      revision: 2
+    three-one-five:
+      datasource: Prometheus
+      gnetId: 315
+      revision: 3
+    # argo-cd:
+    #   datasource: Prometheus
+    #   url: https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json
+    # external-secrets:
+    #   url: https://gist.githubusercontent.com/MPV/fed281a9cd3297fa8b61387b9004af16/raw/4d88828d6f4d12a405f6ebf5bccedb179f2d9f93/grafana-dashboard-kubernetes-external-secrets.json  
+    #   datasource: default
+
+    # ingress-nginx:
+    #   datasource: Prometheus
+    #   gnetId: 9614
+    #   revision: 1
+
+
+datasources:
+ datasources.yaml:
+   apiVersion: 1
+   datasources:
+   - name: Prometheus
+     type: prometheus
+     url: http://prometheus-server
+     access: proxy
+     isDefault: true
+
+service:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3000"
+
+ingress:
+  enabled: true
+  path: /
+
+  # pathType is only for k8s >= 1.1=
+  pathType: Prefix
+
+  hosts:
+    - grafana.k3d.localhost
+
+
+# argocd
+# https://raw.githubusercontent.com/argoproj/argo-cd/master/examples/dashboard.json
